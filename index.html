@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Saikishore Sridhar — machine learning engineer in neurotechnology (EEG, MRI, fNIRS). Portfolio of brain-computer interface and neuroimaging work.">
+<meta name="author" content="Saikishore Sridhar">
+<meta property="og:title" content="Saikishore Sridhar — ML Engineer, Neurotech">
+<meta property="og:description" content="ML engineer building systems that read the brain — EEG, MRI, fNIRS.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🧠%3C/text%3E%3C/svg%3E">
+<title>Saikishore Sridhar — ML Engineer, Neurotech</title>
+
+<style>
+  :root {
+    /* dark = default identity (the user chose Neuro Dark) */
+    --bg: #070a10;
+    --bg-2: #0c111b;
+    --bg-3: #121a28;
+    --line: #1e2839;
+    --line-2: #2a3750;
+    --text: #e9eff7;
+    --muted: #93a2b8;
+    --faint: #66768e;
+    --cyan: #38e0cf;
+    --cyan-soft: rgba(56, 224, 207, 0.14);
+    --violet: #9a8cff;
+    --violet-soft: rgba(154, 140, 255, 0.14);
+    --grid: rgba(120, 160, 200, 0.06);
+    --card-glow: rgba(56, 224, 207, 0.10);
+    --shadow: rgba(0, 0, 0, 0.55);
+
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", "Cascadia Code", "Fira Code", Menlo, Consolas, monospace;
+    --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+    --wrap: 1080px;
+    --step--1: clamp(0.78rem, 0.76rem + 0.1vw, 0.84rem);
+    --step-0: clamp(0.95rem, 0.92rem + 0.14vw, 1.02rem);
+    --step-1: clamp(1.12rem, 1.05rem + 0.35vw, 1.35rem);
+    --step-2: clamp(1.4rem, 1.25rem + 0.7vw, 1.9rem);
+    --step-3: clamp(1.9rem, 1.5rem + 1.6vw, 2.9rem);
+    --hero: clamp(2.3rem, 1.4rem + 4.2vw, 4.4rem);
+  }
+
+  :root[data-theme="dark"] { color-scheme: dark; }
+
+  :root[data-theme="light"] {
+    color-scheme: light;
+    --bg: #eef1f6;
+    --bg-2: #ffffff;
+    --bg-3: #ffffff;
+    --line: #dbe2ec;
+    --line-2: #c3cddd;
+    --text: #101a2b;
+    --muted: #4c5a70;
+    --faint: #7385a0;
+    --cyan: #0c9c96;
+    --cyan-soft: rgba(12, 156, 150, 0.10);
+    --violet: #6a54e6;
+    --violet-soft: rgba(106, 84, 230, 0.10);
+    --grid: rgba(30, 60, 110, 0.06);
+    --card-glow: rgba(12, 156, 150, 0.12);
+    --shadow: rgba(30, 50, 90, 0.10);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--step-0);
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  ::selection { background: var(--cyan); color: #04120f; }
+
+  :focus-visible {
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .wrap { width: min(92vw, var(--wrap)); margin-inline: auto; }
+
+  .mono { font-family: var(--font-mono); }
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6em;
+  }
+  .eyebrow::before {
+    content: "";
+    width: 1.8em; height: 1px;
+    background: linear-gradient(90deg, var(--cyan), transparent);
+  }
+
+  /* ---------- Nav ---------- */
+  header.nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: color-mix(in srgb, var(--bg) 78%, transparent);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 60px;
+  }
+  .brand {
+    font-family: var(--font-mono);
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-size: var(--step-0);
+  }
+  .brand .dot {
+    width: 9px; height: 9px; border-radius: 50%;
+    background: var(--cyan);
+    box-shadow: 0 0 10px var(--cyan);
+  }
+  .nav-links { display: flex; align-items: center; gap: 1.4rem; }
+  .nav-links a.link {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    transition: color 0.2s;
+  }
+  .nav-links a.link:hover { color: var(--text); }
+  @media (max-width: 720px) { .nav-links .link { display: none; } }
+
+  .icon-btn {
+    display: inline-grid; place-items: center;
+    width: 34px; height: 34px;
+    border: 1px solid var(--line-2);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .icon-btn:hover { color: var(--cyan); border-color: var(--cyan); background: var(--cyan-soft); }
+  .icon-btn svg { width: 17px; height: 17px; display: block; }
+  .nav-actions { display: flex; align-items: center; gap: 0.6rem; }
+  .theme-toggle .moon { display: none; }
+  :root[data-theme="light"] .theme-toggle .sun { display: none; }
+  :root[data-theme="light"] .theme-toggle .moon { display: block; }
+
+  /* ---------- Hero ---------- */
+  .hero { position: relative; overflow: hidden; border-bottom: 1px solid var(--line); }
+  #eeg {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    display: block;
+    pointer-events: none;
+    opacity: 0.9;
+  }
+  .hero-veil {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(120% 90% at 15% 15%, transparent 40%, var(--bg) 92%),
+      linear-gradient(180deg, color-mix(in srgb, var(--bg) 20%, transparent) 0%, transparent 30%, var(--bg) 100%);
+  }
+  .hero-inner {
+    position: relative;
+    z-index: 2;
+    padding-block: clamp(4.5rem, 12vh, 8rem) clamp(3rem, 8vh, 5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    max-width: 40ch;
+  }
+  h1.headline {
+    font-family: var(--font-mono);
+    font-size: var(--hero);
+    line-height: 1.04;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin: 0;
+    text-wrap: balance;
+  }
+  h1.headline .grad {
+    background: linear-gradient(100deg, var(--cyan), var(--violet));
+    -webkit-background-clip: text; background-clip: text;
+    -webkit-text-fill-color: transparent; color: transparent;
+  }
+  .lede {
+    font-size: var(--step-1);
+    color: var(--muted);
+    max-width: 46ch;
+    margin: 0;
+    line-height: 1.6;
+  }
+  .lede strong { color: var(--text); font-weight: 600; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 0.4rem; }
+  .btn {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.03em;
+    padding: 0.7rem 1.15rem;
+    border-radius: 9px;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+  }
+  .btn-primary { background: var(--cyan); color: #04120f; font-weight: 600; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 26px -8px var(--cyan); }
+  .btn-ghost { border-color: var(--line-2); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-soft); }
+
+  /* ---------- Stat strip ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .stat { padding: 1.5rem 1.2rem; border-left: 1px solid var(--line); }
+  .stat:first-child { border-left: none; }
+  .stat .n {
+    font-family: var(--font-mono);
+    font-size: var(--step-2);
+    font-weight: 600;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+  }
+  .stat .l {
+    font-size: var(--step--1);
+    color: var(--faint);
+    margin-top: 0.5rem;
+    letter-spacing: 0.01em;
+  }
+  @media (max-width: 640px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .stat:nth-child(3) { border-left: none; }
+    .stat:nth-child(n+3) { border-top: 1px solid var(--line); }
+  }
+
+  /* ---------- Sections ---------- */
+  section { padding-block: clamp(3.5rem, 8vh, 6rem); }
+  .section-head { margin-bottom: 2.6rem; max-width: 60ch; }
+  .section-head h2 {
+    font-family: var(--font-mono);
+    font-size: var(--step-3);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0.7rem 0 0;
+    text-wrap: balance;
+  }
+  .section-head p { color: var(--muted); margin: 0.8rem 0 0; }
+
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: clamp(1.5rem, 4vw, 3.5rem);
+    align-items: start;
+  }
+  #about p.bio { font-size: var(--step-1); color: var(--text); margin: 0 0 1rem; line-height: 1.7; }
+  #about p.bio.sub { font-size: var(--step-0); color: var(--muted); }
+  .focus-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-2);
+    padding: 1.4rem;
+  }
+  .focus-card h3 {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 1rem;
+  }
+  .focus-list { display: flex; flex-direction: column; gap: 0.85rem; }
+  .focus-item { display: flex; align-items: baseline; gap: 0.7rem; }
+  .focus-item .tag {
+    font-family: var(--font-mono);
+    font-size: 0.7rem; letter-spacing: 0.08em;
+    color: var(--cyan);
+    border: 1px solid var(--cyan-soft);
+    background: var(--cyan-soft);
+    padding: 0.15rem 0.45rem; border-radius: 5px;
+    white-space: nowrap;
+  }
+  .focus-item span.d { color: var(--muted); font-size: var(--step--1); }
+  @media (max-width: 760px) { #about .about-grid { grid-template-columns: 1fr; } }
+
+  /* ---------- Experience timeline ---------- */
+  #experience { background: var(--bg-2); border-block: 1px solid var(--line); }
+  .timeline { position: relative; display: flex; flex-direction: column; gap: 0; }
+  .job {
+    position: relative;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+  }
+  .job:first-child { border-top: none; }
+  .job .when {
+    font-family: var(--font-mono);
+    font-size: var(--step--1);
+    color: var(--faint);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.2rem;
+  }
+  .job .place { color: var(--cyan); font-weight: 600; margin-top: 0.4rem; }
+  .job h3 {
+    font-size: var(--step-1);
+    margin: 0 0 0.3rem;
+    font-weight: 600;
+    display: flex; align-items: center; gap: 0.6rem;
+  }
+  .job .role2 { margin-top: 1.3rem; padding-top: 1.1rem; border-top: 1px dashed var(--line-2); }
+  .job ul { margin: 0.7rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.55rem; }
+  .job li { position: relative; padding-left: 1.3rem; color: var(--muted); }
+  .job li::before {
+    content: "";
+    position: absolute; left: 0; top: 0.62em;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--cyan); opacity: 0.7;
+  }
+  .job .role-tag {
+    font-family: var(--font-mono); font-size: 0.68rem; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--violet); border: 1px solid var(--violet-soft); background: var(--violet-soft);
+    padding: 0.12rem 0.45rem; border-radius: 5px;
+  }
+  @media (max-width: 700px) {
+    .job { grid-template-columns: 1fr; gap: 0.6rem; }
+    .job .when { padding-top: 0; }
+  }
+
+  /* ---------- Projects ---------- */
+  .proj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.2rem;
+  }
+  .proj {
+    position: relative;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: var(--bg-2);
+    padding: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.9rem;
+    transition: transform 0.2s, border-color 0.2s, box-shadow 0.25s;
+    overflow: hidden;
+  }
+  .proj::after {
+    content: "";
+    position: absolute; inset: 0 0 auto 0; height: 2px;
+    background: linear-gradient(90deg, var(--cyan), var(--violet));
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .proj:hover { transform: translateY(-4px); border-color: var(--line-2); box-shadow: 0 18px 40px -22px var(--shadow), 0 0 0 1px var(--card-glow); }
+  .proj:hover::after { transform: scaleX(1); }
+  .proj .p-org {
+    font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--faint);
+  }
+  .proj h3 { font-size: var(--step-1); margin: 0; font-weight: 600; line-height: 1.25; text-wrap: balance; }
+  .proj p { margin: 0; color: var(--muted); font-size: var(--step-0); }
+  .proj .tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: auto; }
+  .proj .t {
+    font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.02em;
+    color: var(--muted); border: 1px solid var(--line-2); border-radius: 6px;
+    padding: 0.16rem 0.5rem;
+  }
+  .proj .p-link {
+    font-family: var(--font-mono); font-size: var(--step--1); color: var(--cyan);
+    display: inline-flex; align-items: center; gap: 0.4rem; width: fit-content;
+  }
+  .proj .p-link:hover { gap: 0.65rem; }
+  .proj .p-note { font-family: var(--font-mono); font-size: var(--step--1); color: var(--faint); }
+
+  /* ---------- Skills ---------- */
+  .skill-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.4rem; }
+  .skill-block h3 {
+    font-family: var(--font-mono); font-size: var(--step--1); letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--faint); margin: 0 0 0.9rem;
+    display: flex; align-items: center; gap: 0.5rem;
+  }
+  .skill-block h3::before { content: ""; width: 6px; height: 6px; background: var(--cyan); border-radius: 1px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+  .chip {
+    font-size: var(--step--1);
+    border: 1px solid var(--line);
+    background: var(--bg-2);
+    border-radius: 8px;
+    padding: 0.35rem 0.7rem;
+    color: var(--text);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .chip:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  /* ---------- Education ---------- */
+  #education { background: var(--bg-2); border-block: 1px solid var(--line); }
+  .edu-list { display: flex; flex-direction: column; }
+  .edu {
+    display: grid; grid-template-columns: 1fr auto; gap: 1rem 2rem;
+    padding: 1.4rem 0; border-top: 1px solid var(--line); align-items: baseline;
+  }
+  .edu:first-child { border-top: none; }
+  .edu h3 { font-size: var(--step-1); margin: 0 0 0.25rem; font-weight: 600; }
+  .edu .school { color: var(--cyan); font-size: var(--step-0); }
+  .edu .note { color: var(--muted); font-size: var(--step--1); margin-top: 0.4rem; }
+  .edu .yr { font-family: var(--font-mono); font-size: var(--step--1); color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  @media (max-width: 560px) { .edu { grid-template-columns: 1fr; } }
+
+  /* ---------- Contact / footer ---------- */
+  #contact { text-align: center; }
+  #contact .eyebrow { justify-content: center; }
+  #contact .eyebrow::before { display: none; }
+  #contact h2 {
+    font-family: var(--font-mono); font-size: var(--step-3); font-weight: 600;
+    margin: 1rem 0 0.6rem; letter-spacing: -0.01em; text-wrap: balance;
+  }
+  #contact p { color: var(--muted); max-width: 48ch; margin: 0 auto 2rem; }
+  .contact-links { display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+  footer {
+    border-top: 1px solid var(--line);
+    padding-block: 2rem;
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem;
+    color: var(--faint); font-family: var(--font-mono); font-size: var(--step--1);
+  }
+  footer .fdot { color: var(--cyan); }
+
+  /* ---------- reveal animation ---------- */
+  .anim-ready .reveal { opacity: 0; transform: translateY(18px); }
+  .anim-ready .reveal.in { opacity: 1; transform: none; transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); }
+</style>
+</head>
+<body>
+<header class="nav">
+  <div class="wrap nav-inner">
+    <a href="#top" class="brand" aria-label="Saikishore Sridhar — home">
+      <span class="dot" aria-hidden="true"></span>saikishore<span style="color:var(--faint)">.sridhar</span>
+    </a>
+    <nav class="nav-links" aria-label="Primary">
+      <a class="link" href="#about">about</a>
+      <a class="link" href="#experience">experience</a>
+      <a class="link" href="#projects">projects</a>
+      <a class="link" href="#skills">skills</a>
+      <a class="link" href="#contact">contact</a>
+    </nav>
+    <div class="nav-actions">
+      <a class="icon-btn" href="https://github.com/saikkkk19" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.7 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.43-2.7 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/></svg>
+      </a>
+      <a class="icon-btn" href="https://linkedin.com/in/saikishore-s-b03957240" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.66H9.35V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.8 0 0 .78 0 1.75v20.5C0 23.22.8 24 1.77 24h20.45c.98 0 1.78-.78 1.78-1.75V1.75C24 .78 23.2 0 22.22 0Z"/></svg>
+      </a>
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle light and dark theme">
+        <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"/></svg>
+        <svg class="moon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21 12.8A8.5 8.5 0 1 1 11.2 3a6.8 6.8 0 0 0 9.8 9.8Z"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <section class="hero" aria-label="Introduction">
+    <canvas id="eeg" aria-hidden="true"></canvas>
+    <div class="hero-veil" aria-hidden="true"></div>
+    <div class="wrap hero-inner">
+      <span class="eyebrow reveal">ML Engineer · Neurotechnology</span>
+      <h1 class="headline reveal">I build machine-learning systems that <span class="grad">read the brain.</span></h1>
+      <p class="lede reveal">From raw <strong>EEG</strong>, <strong>MRI</strong> and <strong>fNIRS</strong> signal to production models and closed-loop feedback. Currently an ML engineer at <strong>BrainsightAI</strong> and a fully-funded <strong>MEXT scholar</strong> heading into a Neural Engineering master's at SIT Tokyo.</p>
+      <div class="cta-row reveal">
+        <a class="btn btn-primary" href="#projects">View projects →</a>
+        <a class="btn btn-ghost" href="mailto:saikishoresk04@gmail.com">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="stats" aria-label="At a glance">
+    <div class="stat"><div class="n">88%</div><div class="l">Best EEG classifier accuracy</div></div>
+    <div class="stat"><div class="n">9.22<span style="color:var(--faint);font-size:0.6em">/10</span></div><div class="l">Undergraduate CGPA</div></div>
+    <div class="stat"><div class="n">MEXT '26</div><div class="l">Fully-funded scholar, SIT Tokyo</div></div>
+    <div class="stat"><div class="n">Tokyo</div><div class="l">Based in Japan · open to work</div></div>
+  </div>
+
+  <section id="about" class="wrap">
+    <div class="about-grid">
+      <div class="reveal">
+        <span class="eyebrow">About</span>
+        <p class="bio" style="margin-top:1.2rem">I'm a machine-learning engineer working across the full ML lifecycle — data pipelines, model development, and production deployment — with a track record of shipping models into real clinical products.</p>
+        <p class="bio sub">My pull toward neurotechnology is personal: I want to decode what the brain is doing and turn that signal into something useful, whether that's a clinical neuroimaging pipeline or a closed-loop brain–computer interface. That's taken me from EEG classification in Chennai to real-time neurofeedback research in Tokyo.</p>
+      </div>
+      <div class="focus-card reveal">
+        <h3>Focus areas</h3>
+        <div class="focus-list">
+          <div class="focus-item"><span class="tag">EEG</span><span class="d">BCI, motor/sensory imagery, real-time decoding</span></div>
+          <div class="focus-item"><span class="tag">MRI</span><span class="d">4D imaging, clinical neuroimaging pipelines</span></div>
+          <div class="focus-item"><span class="tag">fNIRS</span><span class="d">Functional near-infrared signal analysis</span></div>
+          <div class="focus-item"><span class="tag">MLOps</span><span class="d">Validation, deployment, monitoring in production</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Experience</span>
+        <h2>Signal, model, product.</h2>
+        <p>Four years spanning research labs, a university ML team, and a clinical neurotech company.</p>
+      </div>
+      <div class="timeline">
+        <article class="job reveal">
+          <div class="when">
+            2025 — 2026<br><span style="color:var(--muted)">Bengaluru, India</span>
+            <div class="place">BrainsightAI</div>
+          </div>
+          <div>
+            <h3>Product Deployment &amp; ML Engineer <span class="role-tag">Apr–Aug 2026</span></h3>
+            <ul>
+              <li>Led the transition of validated ML models from research pipelines into production, coordinating deployment, monitoring, and release readiness for clinical neuroimaging workflows.</li>
+              <li>Partnered with cross-functional engineering and clinical teams to translate model-performance requirements into deployment-ready product features.</li>
+            </ul>
+            <div class="role2">
+              <h3>Machine Learning Engineer <span class="role-tag">Jul 2025–Apr 2026</span></h3>
+              <ul>
+                <li>Enhanced and maintained automated neuroimaging pipelines — optimizing ML algorithms, ensuring data quality, and validating across large-scale imaging datasets.</li>
+                <li>Refined image-processing algorithms for 4D MRI datasets, improving accuracy and computational efficiency.</li>
+              </ul>
+            </div>
+          </div>
+        </article>
+
+        <article class="job reveal">
+          <div class="when">
+            Jan — Apr 2025<br><span style="color:var(--muted)">Tokyo, Japan</span>
+            <div class="place">Shibaura Institute of Technology</div>
+          </div>
+          <div>
+            <h3>International Research Intern</h3>
+            <ul>
+              <li>Researched somatosensory movement and recall mechanisms using EEG to decode neural patterns.</li>
+              <li>Built ML pipelines with real-time and session-to-session transfer-learning networks to analyze large EEG datasets for neural-response classification.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="job reveal">
+          <div class="when">
+            Jun — Sep 2024<br><span style="color:var(--muted)">Chennai, India</span>
+            <div class="place">SSN College of Engineering</div>
+          </div>
+          <div>
+            <h3>Machine Learning Intern</h3>
+            <ul>
+              <li>Built an EEG-based system to detect whether students understood online lectures, using signal data collected across multiple subjects.</li>
+              <li>Reached up to 88% classification accuracy, with Random Forest the best-performing model evaluated.</li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="job reveal">
+          <div class="when">
+            Dec 2023 — Jan 2024<br><span style="color:var(--muted)">Chennai, India</span>
+            <div class="place">Energy Alternatives India</div>
+          </div>
+          <div>
+            <h3>Business Analyst Intern</h3>
+            <ul>
+              <li>Conducted market research and prepared analytical reports to support business strategy and decision-making.</li>
+              <li>Collaborated with international companies and overseas clients to generate market insights for cross-border initiatives.</li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Projects</span>
+      <h2>Brains, decoded.</h2>
+      <p>Selected EEG and brain–computer-interface work, from real-time neurofeedback to signal classification.</p>
+    </div>
+    <div class="proj-grid">
+      <article class="proj reveal">
+        <div class="p-org">Shibaura Institute of Technology</div>
+        <h3>Neural Feedback for Somatosensory Rehabilitation</h3>
+        <p>A real-time EEG neurofeedback system comparing visual vs. tactile feedback in sensory imagery — decoding left/right-hand imagery with CSP and ensemble classifiers. Tactile feedback proved more effective, pointing to closed-loop BCI for enhancing neuroplasticity in rehabilitation.</p>
+        <div class="tags"><span class="t">EEG</span><span class="t">CSP</span><span class="t">Real-time LSL</span><span class="t">Ensemble</span><span class="t">Neurofeedback</span></div>
+        <span class="p-note">// private research repository</span>
+      </article>
+
+      <article class="proj reveal">
+        <div class="p-org">Hindustan Institute of Technology &amp; Science</div>
+        <h3>Brainwave-Controlled UAVs</h3>
+        <p>Hands-free drone control from EEG signals — a mind–machine interface classifying imagined movement commands. Compared SVM, Random Forest and ANN models across accuracy, sensitivity, specificity, precision and F1.</p>
+        <div class="tags"><span class="t">EEG</span><span class="t">BCI</span><span class="t">SVM</span><span class="t">Random Forest</span><span class="t">ANN</span></div>
+        <span class="p-note">// private repository</span>
+      </article>
+
+      <article class="proj reveal">
+        <div class="p-org">SSN College of Engineering</div>
+        <h3>EEG Signals for Emotion Detection</h3>
+        <p>Analyzed educational EEG recordings to assess whether students understood a lecture. Built a full preprocessing and feature-extraction pipeline and evaluated ML/DL models — reaching 88% accuracy with Random Forest.</p>
+        <div class="tags"><span class="t">EEG</span><span class="t">Feature extraction</span><span class="t">CNN</span><span class="t">88% acc</span></div>
+        <a class="p-link" href="https://github.com/saikkkk19/eeg-emotion-detection" target="_blank" rel="noopener">View on GitHub →</a>
+      </article>
+    </div>
+  </section>
+
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Toolkit</span>
+        <h2>What I work with.</h2>
+      </div>
+      <div class="skill-grid">
+        <div class="skill-block reveal">
+          <h3>Languages</h3>
+          <div class="chips"><span class="chip">Python</span><span class="chip">R</span><span class="chip">MATLAB</span></div>
+        </div>
+        <div class="skill-block reveal">
+          <h3>Deep Learning</h3>
+          <div class="chips"><span class="chip">TensorFlow</span><span class="chip">PyTorch</span><span class="chip">Keras</span><span class="chip">CNN</span><span class="chip">Transfer Learning</span><span class="chip">RNN / LSTM</span></div>
+        </div>
+        <div class="skill-block reveal">
+          <h3>ML &amp; MLOps</h3>
+          <div class="chips"><span class="chip">Scikit-learn</span><span class="chip">Feature Engineering</span><span class="chip">Model Validation</span><span class="chip">Deployment</span><span class="chip">Monitoring</span><span class="chip">XGBoost</span></div>
+        </div>
+        <div class="skill-block reveal">
+          <h3>EEG &amp; Neuroimaging</h3>
+          <div class="chips"><span class="chip">EEGLAB</span><span class="chip">MNE</span><span class="chip">Nibabel</span><span class="chip">Nilearn</span><span class="chip">FSL</span><span class="chip">MRtrix</span><span class="chip">AFNI</span></div>
+        </div>
+        <div class="skill-block reveal">
+          <h3>Imaging Formats</h3>
+          <div class="chips"><span class="chip">DICOM</span><span class="chip">NIfTI</span><span class="chip">4D MRI</span></div>
+        </div>
+        <div class="skill-block reveal">
+          <h3>Cloud &amp; DevOps</h3>
+          <div class="chips"><span class="chip">AWS</span><span class="chip">Azure</span><span class="chip">GCP</span><span class="chip">Docker</span><span class="chip">Kubernetes</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="education">
+    <div class="wrap">
+      <div class="section-head reveal">
+        <span class="eyebrow">Education</span>
+        <h2>Learning the brain, formally.</h2>
+      </div>
+      <div class="edu-list">
+        <div class="edu reveal">
+          <div>
+            <h3>M.Eng., Neural Engineering <span style="color:var(--faint);font-family:var(--font-mono);font-size:0.7rem;letter-spacing:0.08em">IN PROGRESS</span></h3>
+            <div class="school">Shibaura Institute of Technology · Tokyo</div>
+            <div class="note">Fully-funded MEXT 2026 Scholar.</div>
+          </div>
+          <div class="yr">2026 — 2028</div>
+        </div>
+        <div class="edu reveal">
+          <div>
+            <h3>B.Tech, Artificial Intelligence &amp; Data Analytics</h3>
+            <div class="school">Hindustan Institute of Technology &amp; Science · Chennai</div>
+            <div class="note">CGPA 9.22/10 · 75% scholarship for Rank 5 in the HITSCAT entrance exam.</div>
+          </div>
+          <div class="yr">2022 — 2025</div>
+        </div>
+        <div class="edu reveal">
+          <div>
+            <h3>B.S., Data Science (Online)</h3>
+            <div class="school">Indian Institute of Technology, Madras</div>
+            <div class="note">Certifications: Computational Neuroscience · IIT Kanpur, 2023.</div>
+          </div>
+          <div class="yr">2022 — 2024</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="wrap">
+    <span class="eyebrow reveal">Contact</span>
+    <h2 class="reveal">Let's decode something together.</h2>
+    <p class="reveal">Open to ML engineering and neurotech research roles, collaborations, and interesting brain-signal problems. The fastest way to reach me is email.</p>
+    <div class="contact-links reveal">
+      <a class="btn btn-primary" href="mailto:saikishoresk04@gmail.com">saikishoresk04@gmail.com</a>
+      <a class="btn btn-ghost" href="https://linkedin.com/in/saikishore-s-b03957240" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://github.com/saikkkk19" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </section>
+</main>
+
+<footer class="wrap">
+  <span>Saikishore Sridhar <span class="fdot">·</span> ML Engineer, Neurotech</span>
+  <span>Built in Tokyo <span class="fdot">·</span> 2026</span>
+</footer>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+
+    /* ---- theme ---- */
+    var stored = null;
+    try { stored = localStorage.getItem("sk-theme"); } catch (e) {}
+    root.setAttribute("data-theme", stored || "dark");
+    var toggle = document.getElementById("themeToggle");
+    toggle.addEventListener("click", function () {
+      var next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+      root.setAttribute("data-theme", next);
+      try { localStorage.setItem("sk-theme", next); } catch (e) {}
+    });
+
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    /* ---- reveal on scroll ---- */
+    if (!reduce && "IntersectionObserver" in window) {
+      root.classList.add("anim-ready");
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting) { en.target.classList.add("in"); io.unobserve(en.target); }
+        });
+      }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+      document.querySelectorAll(".reveal").forEach(function (el, i) {
+        el.style.transitionDelay = (Math.min(i % 5, 4) * 60) + "ms";
+        io.observe(el);
+      });
+    }
+
+    /* ---- EEG canvas ---- */
+    var canvas = document.getElementById("eeg");
+    var ctx = canvas.getContext("2d");
+    var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var CH = 6;                      // channels
+    var buffers = [];
+    var phase = [];
+    var COLS = [];
+
+    function themeColors() {
+      var s = getComputedStyle(root);
+      return {
+        cyan: s.getPropertyValue("--cyan").trim() || "#38e0cf",
+        violet: s.getPropertyValue("--violet").trim() || "#9a8cff",
+        grid: s.getPropertyValue("--grid").trim() || "rgba(120,160,200,.06)"
+      };
+    }
+
+    function resize() {
+      var host = canvas.parentElement;
+      W = host.clientWidth; H = host.clientHeight;
+      canvas.width = Math.floor(W * dpr);
+      canvas.height = Math.floor(H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var cols = W < 640 ? 90 : 160;
+      for (var c = 0; c < CH; c++) {
+        if (!buffers[c] || buffers[c].length !== cols) {
+          buffers[c] = new Array(cols).fill(0);
+          phase[c] = Math.random() * 1000;
+        }
+      }
+    }
+
+    function sample(c, t) {
+      // layered sines + light noise → EEG-ish trace, unique per channel
+      var f1 = 0.6 + c * 0.22, f2 = 1.7 + c * 0.5, f3 = 3.3 + c * 0.3;
+      var v = Math.sin(t * f1 + phase[c]) * 0.55
+            + Math.sin(t * f2 + phase[c] * 1.7) * 0.28
+            + Math.sin(t * f3 + phase[c] * 0.4) * 0.16
+            + (Math.random() - 0.5) * 0.18;
+      // occasional spikes
+      if (Math.random() < 0.006) v += (Math.random() - 0.5) * 1.4;
+      return v;
+    }
+
+    function drawGrid(cols) {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = COLS.grid;
+      ctx.lineWidth = 1;
+      var gx = W < 640 ? 44 : 64;
+      ctx.beginPath();
+      for (var x = 0; x <= W; x += gx) { ctx.moveTo(x, 0); ctx.lineTo(x, H); }
+      for (var y = 0; y <= H; y += gx) { ctx.moveTo(0, y); ctx.lineTo(W, y); }
+      ctx.stroke();
+    }
+
+    function render(step) {
+      var cols = buffers[0].length;
+      var colW = W / (cols - 1);
+      var bandH = H / CH;
+      drawGrid(cols);
+      for (var c = 0; c < CH; c++) {
+        var mid = bandH * (c + 0.5);
+        var amp = Math.min(bandH * 0.42, 46);
+        var grad = ctx.createLinearGradient(0, 0, W, 0);
+        grad.addColorStop(0, COLS.cyan);
+        grad.addColorStop(1, COLS.violet);
+        ctx.strokeStyle = grad;
+        ctx.globalAlpha = 0.5 - c * 0.045;
+        ctx.lineWidth = 1.5;
+        ctx.shadowColor = COLS.cyan;
+        ctx.shadowBlur = 6;
+        ctx.beginPath();
+        for (var i = 0; i < cols; i++) {
+          var x = i * colW;
+          var y = mid - buffers[c][i] * amp;
+          if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+      ctx.shadowBlur = 0;
+    }
+
+    var t = 0, last = 0;
+    function loop(now) {
+      if (now - last > 33) {              // ~30fps
+        last = now;
+        t += 0.12;
+        for (var c = 0; c < CH; c++) {
+          buffers[c].push(sample(c, t));
+          buffers[c].shift();
+        }
+        render(t);
+      }
+      raf = requestAnimationFrame(loop);
+    }
+
+    var raf;
+    function start() {
+      COLS = themeColors();
+      resize();
+      if (reduce) {
+        // static single frame
+        for (var c = 0; c < CH; c++) {
+          for (var i = 0; i < buffers[c].length; i++) buffers[c][i] = sample(c, i * 0.12);
+        }
+        render(0);
+      } else {
+        raf = requestAnimationFrame(loop);
+      }
+    }
+
+    var rt;
+    window.addEventListener("resize", function () {
+      clearTimeout(rt);
+      rt = setTimeout(function () { COLS = themeColors(); resize(); if (reduce) render(0); }, 150);
+    });
+    // refresh colors when theme flips
+    toggle.addEventListener("click", function () { setTimeout(function () { COLS = themeColors(); if (reduce) render(0); }, 20); });
+
+    start();
+  })();
+</script>
+</body>
+</html>
