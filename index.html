@@ -659,17 +659,17 @@
     var emailBtn = document.getElementById("emailBtn");
     if (emailBtn) emailBtn.addEventListener("click", function (e) { e.preventDefault(); contact("Let's work together", ""); });
 
-    /* portrait tilt on cursor */
-    var frame = document.querySelector(".portrait-frame");
+    /* portrait tilt on cursor (note: named pFrame to avoid clobbering the canvas frame() loop) */
+    var pFrame = document.querySelector(".portrait-frame");
     var heroEl = document.querySelector(".hero");
-    if (frame && heroEl && !reduce) {
+    if (pFrame && heroEl && !reduce) {
       heroEl.addEventListener("mousemove", function (e) {
-        var r = frame.getBoundingClientRect();
+        var r = pFrame.getBoundingClientRect();
         var dx = (e.clientX - (r.left + r.width / 2)) / r.width;
         var dy = (e.clientY - (r.top + r.height / 2)) / r.height;
-        frame.style.transform = "rotateY(" + (dx * 9).toFixed(2) + "deg) rotateX(" + (-dy * 9).toFixed(2) + "deg)";
+        pFrame.style.transform = "rotateY(" + (dx * 9).toFixed(2) + "deg) rotateX(" + (-dy * 9).toFixed(2) + "deg)";
       });
-      heroEl.addEventListener("mouseleave", function () { frame.style.transform = ""; });
+      heroEl.addEventListener("mouseleave", function () { pFrame.style.transform = ""; });
     }
 
     /* magnetic buttons */
