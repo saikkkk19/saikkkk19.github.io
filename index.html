@@ -359,6 +359,15 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   @media (prefers-reduced-motion: reduce) { .fab .spark { animation: none; } }
 
+  /* ---------- toast ---------- */
+  .toast {
+    position: fixed; left: 50%; bottom: 22px; transform: translate(-50%, 20px);
+    background: var(--ink); color: var(--paper); font-family: var(--font-mono); font-size: var(--s--1);
+    padding: 0.7rem 1.1rem; border-radius: 12px; box-shadow: 0 18px 44px -14px var(--shadow);
+    opacity: 0; pointer-events: none; transition: opacity 0.3s, transform 0.3s; z-index: 90; max-width: 90vw;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
   /* ---------- reveal ---------- */
   .anim-ready .reveal { opacity: 0; transform: translateY(18px); }
   .anim-ready .reveal.in { opacity: 1; transform: none; transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1); }
@@ -556,15 +565,15 @@
       <div class="section-head reveal"><span class="eyebrow">Education</span><h2>Learning the brain, formally.</h2></div>
       <div class="edu-list">
         <div class="edu reveal">
-          <div><h3>M.Eng., Neural Engineering <span class="badge-mini">In progress</span></h3><div class="school">Shibaura Institute of Technology · Tokyo</div><div class="note">Fully-funded MEXT 2026 Scholar.</div></div>
+          <div><h3>Master's specializing in Neural Engineering <span class="badge-mini">In progress</span></h3><div class="school">Shibaura Institute of Technology · Tokyo</div><div class="note">Fully-funded MEXT 2026 Scholar.</div></div>
           <div class="yr">2026 — 2028</div>
         </div>
         <div class="edu reveal">
-          <div><h3>B.Tech, Artificial Intelligence &amp; Data Analytics</h3><div class="school">Hindustan Institute of Technology &amp; Science · Chennai</div><div class="note">CGPA 9.22/10 · 75% scholarship for Rank 5 in the HITSCAT entrance exam.</div></div>
+          <div><h3>Bachelor's majoring in Artificial Intelligence and Data Analytics</h3><div class="school">Hindustan Institute of Technology &amp; Science · Chennai</div><div class="note">CGPA 9.22/10 · 75% scholarship for Rank 5 in the HITSCAT entrance exam.</div></div>
           <div class="yr">2022 — 2025</div>
         </div>
         <div class="edu reveal">
-          <div><h3>B.S., Data Science (Online)</h3><div class="school">Indian Institute of Technology, Madras</div><div class="note">Certification: Computational Neuroscience · IIT Kanpur, 2023.</div></div>
+          <div><h3>Bachelor's majoring in Data Science (Online)</h3><div class="school">Indian Institute of Technology, Madras</div><div class="note">Certification: Computational Neuroscience · IIT Kanpur, 2023.</div></div>
           <div class="yr">2022 — 2024</div>
         </div>
       </div>
@@ -591,7 +600,7 @@
         </button>
       </div>
       <div class="hire-foot">
-        <a class="btn btn-primary magnetic" href="mailto:saikishoresk04@gmail.com?subject=Let's%20work%20together">Email me directly</a>
+        <a class="btn btn-primary magnetic" id="emailBtn" href="mailto:saikishoresk04@gmail.com?subject=Let's%20work%20together">Email me directly</a>
         <span class="em">saikishoresk04@gmail.com</span>
       </div>
     </div>
@@ -609,6 +618,7 @@
 </footer>
 
 <a class="fab" href="#hire" aria-label="Hire me"><span class="spark" aria-hidden="true">✦</span> Hire me</a>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
   (function () {
@@ -627,14 +637,26 @@
       COLORS = null; /* refresh canvas palette */
     });
 
-    /* hire buttons -> prefilled email */
+    /* contact: open the mail app AND copy the address + show a toast, so
+       something visible always happens even without a default mail client */
+    function toast(msg) {
+      var t = document.getElementById("toast");
+      if (!t) return;
+      t.textContent = msg; t.classList.add("show");
+      clearTimeout(toast._t); toast._t = setTimeout(function () { t.classList.remove("show"); }, 4000);
+    }
+    function contact(subject, body) {
+      try { if (navigator.clipboard) navigator.clipboard.writeText(EMAIL); } catch (e) {}
+      toast("📋 " + EMAIL + " copied to clipboard — opening your email app…");
+      var url = "mailto:" + EMAIL + "?subject=" + encodeURIComponent(subject) + (body ? "&body=" + body : "");
+      var w = window.open(url, "_blank");
+      if (!w) window.location.href = url;
+    }
     document.querySelectorAll(".hire-opt").forEach(function (b) {
-      b.addEventListener("click", function () {
-        var s = encodeURIComponent(b.getAttribute("data-subject"));
-        var body = b.getAttribute("data-body");
-        window.location.href = "mailto:" + EMAIL + "?subject=" + s + "&body=" + body;
-      });
+      b.addEventListener("click", function () { contact(b.getAttribute("data-subject"), b.getAttribute("data-body")); });
     });
+    var emailBtn = document.getElementById("emailBtn");
+    if (emailBtn) emailBtn.addEventListener("click", function (e) { e.preventDefault(); contact("Let's work together", ""); });
 
     /* portrait tilt on cursor */
     var frame = document.querySelector(".portrait-frame");
@@ -729,7 +751,7 @@
     var W = 0, H = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
     var nodes = [], pulses = [], COLORS = null;
     var mouse = { x: -9999, y: -9999, active: false };
-    var LINK = 132, MR = 150;
+    var LINK = 132, MR = 175;
 
     function palette() {
       var s = getComputedStyle(root);
@@ -742,8 +764,9 @@
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       var count = Math.round(Math.min(84, Math.max(30, (W * H) / 12000)));
       nodes = [];
+      var sp = reduce ? 0 : 0.28;   /* no autonomous drift under reduced-motion, but still interactive */
       for (var i = 0; i < count; i++) {
-        nodes.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * 0.28, vy: (Math.random() - 0.5) * 0.28, e: 0 });
+        nodes.push({ x: Math.random() * W, y: Math.random() * H, vx: (Math.random() - 0.5) * sp, vy: (Math.random() - 0.5) * sp, e: 0 });
       }
     }
     function frame() {
@@ -821,16 +844,6 @@
     }
     function start() {
       size();
-      if (reduce) {
-        COLORS = palette();
-        ctx.clearRect(0, 0, W, H);
-        for (var i = 0; i < nodes.length; i++) for (var j = i + 1; j < nodes.length; j++) {
-          var a = nodes[i], b = nodes[j], d = Math.hypot(a.x - b.x, a.y - b.y);
-          if (d < LINK) { ctx.strokeStyle = "rgba(" + COLORS.node + "," + ((1 - d / LINK) * 0.22).toFixed(3) + ")"; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke(); }
-        }
-        for (var k = 0; k < nodes.length; k++) { ctx.fillStyle = "rgba(" + COLORS.node + ",0.5)"; ctx.beginPath(); ctx.arc(nodes[k].x, nodes[k].y, 2.4, 0, Math.PI * 2); ctx.fill(); }
-        return;
-      }
       var hero = canvas.parentElement;
       hero.addEventListener("mousemove", pos);
       hero.addEventListener("touchmove", pos, { passive: true });
