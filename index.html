@@ -152,10 +152,51 @@
   }
   .hero-inner {
     position: relative; z-index: 3; pointer-events: none;
-    padding-block: clamp(3.5rem, 10vh, 6.5rem) clamp(3rem, 8vh, 5rem);
-    display: flex; flex-direction: column; gap: 1.5rem; max-width: 42ch;
+    padding-block: clamp(3.5rem, 9vh, 6rem) clamp(3rem, 8vh, 5rem);
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.9fr);
+    gap: clamp(2rem, 5vw, 4rem); align-items: center;
   }
-  .hero-inner a, .hero-inner button { pointer-events: auto; }
+  .hero-copy { display: flex; flex-direction: column; gap: 1.45rem; max-width: 46ch; }
+  .hero-inner a, .hero-inner button, .hero-portrait { pointer-events: auto; }
+  @media (max-width: 860px) {
+    .hero-inner { grid-template-columns: 1fr; gap: 2.4rem; }
+    .hero-portrait { max-width: 300px; }
+  }
+
+  /* portrait */
+  .hero-portrait { position: relative; justify-self: center; width: 100%; max-width: 360px; perspective: 900px; }
+  .hero-portrait .floaty { animation: floaty 6.5s ease-in-out infinite; }
+  @keyframes floaty { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @media (prefers-reduced-motion: reduce) { .hero-portrait .floaty { animation: none; } }
+  .portrait-frame {
+    position: relative; padding: 3px; border-radius: 24px; background: var(--grad);
+    box-shadow: 0 34px 70px -34px var(--shadow); transition: transform 0.18s ease, box-shadow 0.3s ease;
+    transform-style: preserve-3d; will-change: transform;
+  }
+  .portrait-frame::after {
+    content: ""; position: absolute; inset: -18%; border-radius: 50%; z-index: -1;
+    background: radial-gradient(circle, var(--indigo-soft), transparent 62%); filter: blur(14px);
+  }
+  .portrait-frame img { display: block; width: 100%; height: auto; border-radius: 21px; }
+  .portrait-chip {
+    position: absolute; left: 12px; bottom: 12px; z-index: 2;
+    font-family: var(--font-mono); font-size: 0.7rem; color: var(--ink);
+    background: color-mix(in srgb, var(--surface) 86%, transparent); backdrop-filter: blur(6px);
+    border: 1px solid var(--line-2); border-radius: 100px; padding: 0.35rem 0.7rem;
+    display: inline-flex; align-items: center; gap: 0.4rem; box-shadow: 0 6px 16px -8px var(--shadow);
+  }
+  .portrait-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--avail); box-shadow: 0 0 0 3px color-mix(in srgb, var(--avail) 22%, transparent); }
+
+  /* magnetic + card spotlight */
+  .magnetic { will-change: transform; }
+  .proj, .hire-opt { --mx: 50%; --my: 50%; }
+  .proj::before, .hire-opt::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; z-index: 0;
+    background: radial-gradient(240px circle at var(--mx) var(--my), var(--indigo-soft), transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .proj:hover::before, .hire-opt:hover::before { opacity: 1; }
+  .proj > *, .hire-opt > * { position: relative; z-index: 1; }
 
   .badge {
     pointer-events: auto;
@@ -358,15 +399,25 @@
     <canvas id="neural" aria-hidden="true"></canvas>
     <div class="hero-veil" aria-hidden="true"></div>
     <div class="wrap hero-inner">
-      <span class="badge"><span class="pulse" aria-hidden="true"></span> Available for part-time &amp; freelance</span>
-      <div class="role-line"><span class="rk">&gt;</span> <span id="role">Machine Learning Engineer</span></div>
-      <h1 class="headline">Turning brain signals into <span class="grad">software that works.</span></h1>
-      <p class="lede">I'm <strong>Saikishore</strong> — I've shipped ML models into clinical products and built real-time brain–computer interfaces. Now doing my master's at <strong>SIT Tokyo</strong>, and taking on <strong>part-time &amp; freelance</strong> work on the side.</p>
-      <div class="cta-row">
-        <a class="btn btn-primary" href="#hire">Hire me →</a>
-        <a class="btn btn-ghost" href="#projects">See my work</a>
+      <div class="hero-copy">
+        <span class="badge"><span class="pulse" aria-hidden="true"></span> Available for part-time &amp; freelance</span>
+        <div class="role-line"><span class="rk">&gt;</span> <span id="role">Machine Learning Engineer</span></div>
+        <h1 class="headline">Turning brain signals into <span class="grad">software that works.</span></h1>
+        <p class="lede">I'm <strong>Saikishore</strong> — I've shipped ML models into clinical products and built real-time brain–computer interfaces. Now doing my master's at <strong>SIT Tokyo</strong>, and taking on <strong>part-time &amp; freelance</strong> work on the side.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary magnetic" href="#hire">Hire me →</a>
+          <a class="btn btn-ghost" href="#projects">See my work</a>
+        </div>
+        <p class="hero-hint" aria-hidden="true">✶ move your cursor through the network — it fires back</p>
       </div>
-      <p class="hero-hint" aria-hidden="true">✶ move your cursor through the network — it fires back</p>
+      <div class="hero-portrait">
+        <div class="floaty">
+          <div class="portrait-frame">
+            <img src="saikishore.jpg" width="768" height="1024" alt="Saikishore Sridhar" fetchpriority="high">
+            <span class="portrait-chip"><span class="dot" aria-hidden="true"></span> Tokyo · open to work</span>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -540,7 +591,7 @@
         </button>
       </div>
       <div class="hire-foot">
-        <a class="btn btn-primary" href="mailto:saikishoresk04@gmail.com?subject=Let's%20work%20together">Email me directly</a>
+        <a class="btn btn-primary magnetic" href="mailto:saikishoresk04@gmail.com?subject=Let's%20work%20together">Email me directly</a>
         <span class="em">saikishoresk04@gmail.com</span>
       </div>
     </div>
@@ -582,6 +633,41 @@
         var s = encodeURIComponent(b.getAttribute("data-subject"));
         var body = b.getAttribute("data-body");
         window.location.href = "mailto:" + EMAIL + "?subject=" + s + "&body=" + body;
+      });
+    });
+
+    /* portrait tilt on cursor */
+    var frame = document.querySelector(".portrait-frame");
+    var heroEl = document.querySelector(".hero");
+    if (frame && heroEl && !reduce) {
+      heroEl.addEventListener("mousemove", function (e) {
+        var r = frame.getBoundingClientRect();
+        var dx = (e.clientX - (r.left + r.width / 2)) / r.width;
+        var dy = (e.clientY - (r.top + r.height / 2)) / r.height;
+        frame.style.transform = "rotateY(" + (dx * 9).toFixed(2) + "deg) rotateX(" + (-dy * 9).toFixed(2) + "deg)";
+      });
+      heroEl.addEventListener("mouseleave", function () { frame.style.transform = ""; });
+    }
+
+    /* magnetic buttons */
+    if (!reduce) {
+      document.querySelectorAll(".magnetic").forEach(function (btn) {
+        btn.addEventListener("mousemove", function (e) {
+          var r = btn.getBoundingClientRect();
+          var mx = e.clientX - (r.left + r.width / 2);
+          var my = e.clientY - (r.top + r.height / 2);
+          btn.style.transform = "translate(" + (mx * 0.25).toFixed(1) + "px," + (my * 0.4).toFixed(1) + "px)";
+        });
+        btn.addEventListener("mouseleave", function () { btn.style.transform = ""; });
+      });
+    }
+
+    /* card spotlight follows cursor */
+    document.querySelectorAll(".proj, .hire-opt").forEach(function (c) {
+      c.addEventListener("mousemove", function (e) {
+        var r = c.getBoundingClientRect();
+        c.style.setProperty("--mx", (e.clientX - r.left) + "px");
+        c.style.setProperty("--my", (e.clientY - r.top) + "px");
       });
     });
 
